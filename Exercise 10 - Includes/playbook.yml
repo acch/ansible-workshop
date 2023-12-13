@@ -1,0 +1,103 @@
+---
+- name: Tasks to be applied to all hosts
+  hosts: virtual_machines
+  remote_user: root
+  vars_files: vars.yml
+  tasks:
+
+    - name: Check connectivity
+      ping:
+
+    - name: Install NTP package
+      package:
+        name: chrony
+        state: present
+
+    - name: Remove NTP pool definitions
+      lineinfile:
+        path: /etc/chrony.conf
+        regexp: "^pool"
+        state: absent
+
+    - name: Add NTP server definitions
+      lineinfile:
+        path: /etc/chrony.conf
+        regexp: "^server"
+        line: server timeserver iburst
+        state: present
+
+    - name: Start and enable NTP service
+      service:
+        name: chronyd
+        state: started
+        enabled: true
+
+    - name: Add users
+      user:
+        name: "{{ item.name }}"
+        group: "{{ item.group }}"
+        comment: "{{ item.comment }}"
+      loop: "{{ users }}"
+
+    - name: Create and mount filesystem if additional disk available
+      when: "'xvdc' in ansible_devices"
+      block:
+
+        - name: Create filestem on xvdc disk
+          filesystem:
+            dev: /dev/xvdc
+            fstype: xfs
+
+        - name: Mount filesystem to /mnt/test
+          mount:
+            src: /dev/xvdc
+            path: /mnt/test
+            fstype: xfs
+            state: mounted
+
+        - name: Create empty file inside filesystem
+          file:
+            path: /mnt/test/empty-file.txt
+            state: touch
+
+        - name: Create file with content inside filesystem
+          copy:
+            dest: /mnt/test/file-with-content.txt
+            content: |
+              Hello World!
+              How are you today?
+
+- name: Tasks to be applied to hosts with public IP, only
+  hosts: webservers
+  remote_user: root
+  gather_facts: false
+  tasks:
+
+    - name: Install nginx package
+      package:
+        name: nginx
+        state: present
+
+    - name: Start and enable nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Open firewall port
+      firewalld:
+        service: http
+        immediate: true
+        permanent: true
+        state: enabled
+
+    - name: Query user database
+      getent:
+        database: passwd
+
+    - name: Distribute HTML document
+      vars:
+        users: "{{ getent_passwd }}"
+      template:
+        src: index.html.j2
+        dest: /usr/share/nginx/html/index.html

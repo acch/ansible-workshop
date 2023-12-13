@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Ansible Introduction</title>
+</head>
+
+<body>
+  <h1>Hello from {{ ansible_hostname }}! 👋</h1>
+	<h2>System users:</h2>
+	<ul>
+	{% for user, description in getent_passwd.items() %}
+		<li>{{ user }} &middot; {{ description[3] }}</li>
+	{% endfor %}
+	</ul>
+</body>
+
+</html>

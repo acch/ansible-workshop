@@ -1,0 +1,16 @@
+---
+- name: Exercise 03 - First Playbook
+  hosts: virtual_machines
+  remote_user: root
+  tasks:
+
+    - name: Check connectivity
+      ping:
+
+    - name: Install nginx package
+      package:
+        name: nginx
+        state: present
+
+    ######
+    # TODO: Start and enable nginx service

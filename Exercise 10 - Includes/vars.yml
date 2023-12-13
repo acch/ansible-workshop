@@ -1,0 +1,13 @@
+users:
+  - name: user1
+    group: users
+    comment: "my user1"
+  - name: user2
+    group: users
+    comment: "my user2"
+  - name: user3
+    group: users
+    comment: "my user3"
+  - name: user4
+    group: users
+    comment: "my user4"

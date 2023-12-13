@@ -1,0 +1,19 @@
+---
+- name: Exercise 09 - Conditionals
+  hosts: virtual_machines
+  remote_user: root
+  tasks:
+
+    - name: Check connectivity
+      ping:
+
+    - name: Identify hosts with xvdc disk
+      debug:
+        msg: # TODO 1. "{{ <expression> }}"
+      # TODO 2. when: <expression>
+
+######
+# TODO 3. Add task to create filesystem on xvdc disk
+
+######
+# TODO 4. Add task to mount newly created filesystem

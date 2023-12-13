@@ -1,0 +1,38 @@
+---
+- name: Exercise 08 - Parallelism
+  hosts: server#TEAM#-a  # TODO: Change this to 'virtual_machines' group
+  remote_user: root
+  tasks:
+
+    - name: Check connectivity
+      ping:
+
+    - name: Install NTP package
+      package:
+        name: chrony
+        state: present
+
+    - name: Remove NTP pool definitions
+      lineinfile:
+        path: /etc/chrony.conf
+        regexp: '^pool'
+        state: absent
+
+    - name: Add NTP server definitions
+      lineinfile:
+        path: /etc/chrony.conf
+        regexp: '^server'
+        line: server time.service.networklayer.com iburst
+        state: present
+
+    - name: Start and enable NTP service
+      service:
+        name: chronyd
+        state: started
+        enabled: true
+
+######
+# TODO: Add another play for 'webservers' group
+#       1.  Install 'nginx' package
+#       2.  Start and enable 'nginx' service
+#       3.  Open firewall port 80/tcp or service http

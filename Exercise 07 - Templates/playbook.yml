@@ -1,0 +1,31 @@
+---
+- name: Exercise 07 - Templates
+  hosts: virtual_machines
+  remote_user: root
+  tasks:
+
+    - name: Check connectivity
+      ping:
+
+    - name: Install nginx package
+      package:
+        name: nginx
+        state: present
+
+    - name: Start and enable nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Open firewall port
+      firewalld:
+        service: http
+        state: enabled
+        immediate: true
+        permanent: true
+
+    - name: Distribute HTML document
+      copy:  # TODO: Change this to 'template' module
+        src: index.html
+        dest: /usr/share/nginx/html/index.html

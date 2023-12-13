@@ -1,0 +1,15 @@
+---
+- name: Exercise 05 - Variables
+  hosts: virtual_machines
+  remote_user: root
+
+  vars:
+    # TODO1: Add variable 'username' and use it in the tasks
+    # TODO2: Add more complex variable 'username' including two mappings 'name: username' and 'group: usergroup'. Use these variable mapping in the tasks
+    # TODO3: Move the 'vars:' section to a separate variable file
+
+  tasks:
+
+    - name: Create user
+      user:
+        name: user1

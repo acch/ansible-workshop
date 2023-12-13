@@ -1,0 +1,21 @@
+---
+- name: Exercise 06 - Loops
+  hosts: virtual_machines
+  remote_user: root
+
+  vars:
+    # TODO: Add list variable 'all_users' with elements 'user1' and 'user2'
+
+  tasks:
+
+    - name: Delete users in loop
+      user:
+        name: "{{ item }}"
+        remove: true
+        state: absent
+      loop:
+        - user1
+        - user2
+        - user3
+        - user4
+        - user5

@@ -1,0 +1,26 @@
+---
+- name: Exercise 04 - Second Playbook
+  hosts: virtual_machines
+  remote_user: root
+  tasks:
+
+    - name: Check connectivity
+      ping:
+
+    - name: Install nginx package
+      package:
+        name: nginx
+        state: present
+
+    - name: Start and enable nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: true
+
+    ######
+    # TODO: Either: enable HTTP service or port 80/TCP in firewalld immediately
+    # TODO: Or: disable firewalld alltogether
+
+    ######
+    # TODO: Optionally install chrony, adjust /etc/chrony.conf, start and enable chronyd service
